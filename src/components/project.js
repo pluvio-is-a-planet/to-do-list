@@ -4,6 +4,7 @@ class Project {
         this._title = title;
     }
 
+    get id() { return this._id }
     get title() { return this._title }
 
     update({title}) {
