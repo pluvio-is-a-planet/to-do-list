@@ -10,9 +10,9 @@ import { extractType } from "../logic/id.js";
 
 const controller = (() => {
     // I plan to initialize these collections from localStorage using a separate save/load module
-    const _projects = Collection.fromJSON(Project, load("projects"));
-    const _tasks = Collection.fromJSON(Task, load("tasks"));
-    const _notes = Collection.fromJSON(Note, load("notes"));
+    const _projects = Collection.fromJSON(Project, load("projects"), () => save("projects", _projects));
+    const _tasks = Collection.fromJSON(Task, load("tasks"), () => save("tasks", _tasks));
+    const _notes = Collection.fromJSON(Note, load("notes"), () => save("notes", _notes));
 
     const _collections = { project: _projects, task: _tasks, note: _notes };
 
