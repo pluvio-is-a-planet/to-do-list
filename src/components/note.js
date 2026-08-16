@@ -26,6 +26,10 @@ class Note {
             description: this._description,
         };
     }
+
+    static fromJSON(options) {
+        return new this(options);
+    }
 }
 
 export default Note;
