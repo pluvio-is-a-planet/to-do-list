@@ -16,6 +16,10 @@ const controller = (() => {
 
     _collections = { project: _projects, task: _tasks, note: _notes };
 
+    function onUpdate(callback) {
+        Object.values(_collections).forEach(collection => collection.subscribe(callback));
+    }
+
     function _removeCascade(id) {
         getChildren(id).forEach(child => _removeCascade(child.id));
         return _resolveCollection(id).remove(id);
@@ -40,6 +44,7 @@ const controller = (() => {
         notes: _tasks,
         remove: _removeCascade,
         getChildren,
+        onUpdate,
     };
 })();
 
