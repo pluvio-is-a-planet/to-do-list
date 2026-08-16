@@ -17,6 +17,19 @@ class Task {
         this._dueDate = dueDate;
         this._priority = priority;
     }
+
+    toJSON() {
+        return {
+            title: this._title,
+            description: this._description,
+            dueDate: this._dueDate,
+            priority: this._priority,
+        };
+    }
+
+    static fromJSON(options) {
+        return new this(options);
+    }
 }
 
 export default Task;
