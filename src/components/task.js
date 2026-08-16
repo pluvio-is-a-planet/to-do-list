@@ -7,6 +7,7 @@ class Task {
         this._priority = priority;
     }
 
+    get id() { return this._id }
     get title() { return this._title }
     get description() { return this._description }
     get dueDate() { return this._dueDate }
