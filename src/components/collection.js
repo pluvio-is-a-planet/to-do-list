@@ -8,10 +8,16 @@ class Collection {
         return this._itemArray;
     }
 
+    // --- methods for individual items ---
+
     add(options) {
         const newItem = new this._itemClass(options);
         this._itemArray.push(newItem);
         return newItem;
+    }
+
+    find(id) {
+        return this._itemArray.find(entry => entry.id === id);
     }
 
     remove(id) {
