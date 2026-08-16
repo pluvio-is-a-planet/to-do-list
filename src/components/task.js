@@ -1,5 +1,6 @@
 class Task {
-    constructor({id, title, description, dueDate, priority}) {
+    constructor({parentId, id, title, description, dueDate, priority}) {
+        this._parentId = parentId;
         this._id = id ?? crypto.randomUUID();
         this._title = title;
         this._description = description;
@@ -7,6 +8,7 @@ class Task {
         this._priority = priority;
     }
 
+    get parent() { return this._parentId ? { id: this._parentId, type: extractType(this._parentId) } : null }
     get id() { return this._id }
     get title() { return this._title }
     get description() { return this._description }
@@ -22,6 +24,8 @@ class Task {
 
     toJSON() {
         return {
+            parentId: this._parentId,
+            id: this._id,
             title: this._title,
             description: this._description,
             dueDate: this._dueDate,
