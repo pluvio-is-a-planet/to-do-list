@@ -1,7 +1,9 @@
+import { extractType, resolveId } from "../logic/id.js";
+
 class Task {
     constructor({parentId, id, title, description, dueDate, priority}) {
         this._parentId = parentId;
-        this._id = id ?? crypto.randomUUID();
+        this._id = resolveId("task", id);
         this._title = title;
         this._description = description;
         this._dueDate = dueDate;

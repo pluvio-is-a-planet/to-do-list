@@ -1,6 +1,8 @@
+import { resolveId } from "../logic/id.js";
+
 class Project {
     constructor({id, title}) {
-        this._id = id ?? crypto.randomUUID();
+        this._id = resolveId("project", id);
         this._title = title;
     }
 

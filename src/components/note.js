@@ -1,7 +1,9 @@
+import { extractType, resolveId } from "../logic/id.js";
+
 class Note {
     constructor({parentId, id, title, description}) {
         this._parentId = parentId;
-        this._id = id ?? crypto.randomUUID();
+        this._id = resolveId("note", id);
         this._title = title;
         this._description = description;
     }
