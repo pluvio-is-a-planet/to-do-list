@@ -14,7 +14,7 @@ const controller = (() => {
     const _tasks = Collection.fromJSON(Task, load("tasks"));
     const _notes = Collection.fromJSON(Note, load("notes"));
 
-    _collections = { project: _projects, task: _tasks, note: _notes };
+    const _collections = { project: _projects, task: _tasks, note: _notes };
 
     function onUpdate(callback) {
         Object.values(_collections).forEach(collection => collection.subscribe(callback));
@@ -28,7 +28,7 @@ const controller = (() => {
     function _resolveCollection(id) {
         if (!id) return null;
         const type = extractType(id);
-        if (!collection) throw new Error(`Unknown item type for id "${id}"`);
+        if (!_collections[type]) throw new Error(`Unknown item type for id "${id}"`);
         return _collections[type]
     }
 
@@ -41,7 +41,7 @@ const controller = (() => {
     return {
         projects: _projects,
         tasks: _tasks,
-        notes: _tasks,
+        notes: _notes,
         remove: _removeCascade,
         getChildren,
         onUpdate,
