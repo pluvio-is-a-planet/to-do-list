@@ -1,10 +1,12 @@
 class Note {
-    constructor({id, title, description}) {
+    constructor({parentId, id, title, description}) {
+        this._parentId = parentId;
         this._id = id ?? crypto.randomUUID();
         this._title = title;
         this._description = description;
     }
 
+    get parent() { return this._parentId ? { id: this._parentId, type: extractType(this._parentId) } : null }
     get id() { return this._id }
     get title() { return this._title }
     get description() { return this._description }
@@ -16,6 +18,8 @@ class Note {
 
     toJSON() {
         return {
+            parentId: this._parentId,
+            id: this._id,
             title: this._title,
             description: this._description,
         };
