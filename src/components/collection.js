@@ -10,7 +10,7 @@ class Collection {
 
     add(options) {
         const newItem = new this._itemClass(options);
-        _itemArray.push(newItem);
+        this._itemArray.push(newItem);
         return newItem;
     }
 
@@ -19,6 +19,14 @@ class Collection {
         if (index === -1) return null;
         const removedItem = this._itemArray.splice(index, 1)[0];
         return removedItem;
+    }
+
+    toJSON() {
+        return this._itemArray.map(entry => entry.toJSON());
+    }
+
+    static fromJSON(itemClass, itemArray) {
+        return new this(itemClass, itemArray.map(entry => itemClass.fromJSON(entry)));
     }
 }
 
