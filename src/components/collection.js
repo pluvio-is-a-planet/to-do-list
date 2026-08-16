@@ -22,6 +22,13 @@ class Collection {
         return this._itemArray.find(entry => entry.id === id);
     }
 
+    update(id, options) {
+        const itemToUpdate = this.find(id);
+        itemToUpdate.update(options);
+        this._notify();
+        return itemToUpdate;
+    }
+
     remove(id) {
         const index = this._itemArray.findIndex(entry => entry.id === id);
         if (index === -1) return null;
