@@ -1,6 +1,13 @@
 .content .project-header {
+    grid-column: 1 / -1;
+
     display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+
+.project-header .project-title {
+    padding: 0;
 }
 
 .project-header .actions {
@@ -12,4 +19,135 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* --- task/note dialogs --- */
+
+dialog.task-form-dialog,
+dialog.note-form-dialog {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+
+    border: 2px solid var(--color-btn-border);
+    border-radius: 1em;
+    padding: 20px;
+
+    width: 400px;
+
+    font-family: "Oldenburg", serif;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+}
+
+dialog.task-form-dialog::backdrop,
+dialog.note-form-dialog::backdrop {
+    background-color: var(--color-bg-dark);
+    opacity: 0.7;
+}
+
+.task-form-dialog form,
+.note-form-dialog form {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 10px;
+}
+
+.task-form-dialog .form-row:first-child,
+.note-form-dialog .form-row:first-child {
+    flex-direction: column;
+}
+
+.task-form-dialog .form-row,
+.note-form-dialog .form-row {
+    display: flex;
+    gap: 4px;
+
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.task-form-dialog .form-row label,
+.note-form-dialog .form-row label {
+    font-size: 0.9rem;
+    opacity: 0.85;
+}
+
+.task-form-dialog .form-row label[for="task-description"],
+.task-form-dialog .form-row label[for="note-description"] {
+    align-self: flex-start;
+}
+
+.task-form-dialog input,
+.task-form-dialog textarea,
+.task-form-dialog select,
+.note-form-dialog input,
+.note-form-dialog textarea {
+    padding: 6px 10px;
+
+    background-color: var(--color-bg-dark);
+    color: var(--color-text);
+
+    border: 2px solid var(--color-btn-border);
+    border-radius: 0.8em;
+
+    font-family: "Oldenburg", serif;
+    font-size: 1rem;
+}
+
+.task-form-dialog textarea,
+.note-form-dialog textarea {
+    resize: none;
+    min-height: 80px;
+    border-radius: 0.6em;
+
+    width: 100%;
+}
+
+.task-form-dialog input:focus,
+.task-form-dialog textarea:focus,
+.task-form-dialog select:focus,
+.note-form-dialog input:focus,
+.note-form-dialog textarea:focus {
+    outline: none;
+    border-color: var(--color-bg-light);
+}
+
+.content .tasks {  
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-template-rows: subgrid;
+}
+
+.content .notes {
+    grid-column: -2 / -1;
+    grid-row: 2 / -1;
+
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-auto-rows: auto;
+    align-items: center;
+
+    gap: 8px;
+}
+
+.content .task,
+.content .note {
+    --task-bg: #a2988e;
+    background-color: var(--task-bg);
+
+    padding: 8px;
+}
+
+.content .note {
+    --task-bg: #988a5b;
+
+    display: flex;
+    flex-direction: column;
+
+    height: fit-content;
 }
