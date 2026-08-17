@@ -6,6 +6,76 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <header class="header">
+        <h1>
+            TO-DOs
+        </h1>
+    </header>
+    <main class="main">
+        <div class="sidebar">
+            <nav class="categories">
+                <div class="home">
+                    <h2 class="category-header">Home</h2>
+                </div>
+                <div class="daily">
+                    <h2 class="category-header">Daily</h2>
+                </div>
+                <div class="weekly">
+                    <h2 class="category-header">Weekly</h2>
+                </div>
+                <div class="projects">
+                    <h2 class="category-header">Projects</h2>
+                    <ul class="category-list hidden"></ul>
+                </div>
+            </nav>
+            <div class="actions">
+                <div class="add-project">
+                    <button class="project-form-btn">
+                        <img src="./assets/icons/create-project.svg" alt="">
+                    </button>
+                    <form action="#" class="project-form hidden">
+                        <div class="form-row">
+                            <input type="text" name="project-title" id="project-title">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="cancel-btn">Cancel</button>
+                            <button type="submit">Add</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- <div class="add-task">
+                    <button class="task-form-btn"></button>
+                    <dialog id="add-task-dialog">
+                        <form action="#" class="project-form">
+                            <div class="form-row">
+                                <input type="text" name="task-title" id="task-title">
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="cancel-btn">Cancel</button>
+                                <button type="submit">Add</button>
+                            </div>
+                        </form>
+                    </dialog>
+                </div>
+                <div class="add-note">
+                    <button class="note-form-btn"></button>
+                    <dialog id="add-note-dialog">
+                        <form action="#" class="note-form">
+                            <div class="form-row">
+                                <input type="text" name="note-title" id="note-title">
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="cancel-btn">Cancel</button>
+                                <button type="submit">Add</button>
+                            </div>
+                        </form>
+                    </dialog>
+                </div> -->
+            </div>
+        </div>
+        <div class="content">
+
+        </div>
+    </main>
 </body>
 </html>
