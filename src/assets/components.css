@@ -293,6 +293,9 @@ dialog.note-form-dialog::backdrop {
     border-radius: 1em;
     font-size: 0.85rem;
     font-weight: 600;
+
+    width: fit-content;
+    justify-self: flex-end;
 }
 
 .priority-Low {
