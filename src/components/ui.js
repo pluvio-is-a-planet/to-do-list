@@ -42,15 +42,48 @@ const ui = (() => {
     const dailyBtn = document.querySelector(".daily .category-header");
     const weeklyBtn = document.querySelector(".weekly .category-header");
 
+    const taskDialog = document.querySelector(".task-form-dialog");
+    const taskForm = taskDialog.querySelector(".task-form");
+    const noteDialog = document.querySelector(".note-form-dialog");
+    const noteForm = noteDialog.querySelector(".note-form");
+
+    taskDialog.querySelector(".cancel-btn").addEventListener("click", () => taskDialog.close());
+    noteDialog.querySelector(".cancel-btn").addEventListener("click", () => noteDialog.close());
+
     homeBtn.addEventListener("click", renderHome);
-    dailyBtn.addEventListener("click", e => renderProjectContent("project-daily"));
-    weeklyBtn.addEventListener("click", e => renderProjectContent("project-weekly"));
+    dailyBtn.addEventListener("click", e => selectedProject.id = "project-daily");
+    weeklyBtn.addEventListener("click", e => selectedProject.id = "project-weekly");
 
     renderHome();
     renderProjectList();
     controller.onUpdate(renderProjectList);
     controller.onUpdate(() => {
         selectedProject.id = selectedProject.id;
+    });
+
+    taskForm.addEventListener("submit", e => {
+        e.preventDefault();
+        controller.tasks.add({
+            parentId: taskDialog.dataset.parentId,
+            title: taskForm.querySelector("#task-title").value,
+            description: taskForm.querySelector("#task-description").value,
+            dueDate: taskForm.querySelector("#task-due-date").value,
+            priority: taskForm.querySelector("#task-priority").value,
+            completed: false,
+        });
+        taskForm.reset();
+        taskDialog.close();
+    });
+
+    noteForm.addEventListener("submit", e => {
+        e.preventDefault();
+        controller.notes.add({
+            parentId: noteDialog.dataset.parentId,
+            title: noteForm.querySelector("#note-title").value,
+            description: noteForm.querySelector("#note-description").value,
+        });
+        noteForm.reset();
+        noteDialog.close();
     });
 
     sidebarProjects.addEventListener("click", e => {
@@ -103,7 +136,7 @@ const ui = (() => {
         if (uncompletedTasks.length > 0) {
             const container = createCustomElement("div", "tasks");
             uncompletedTasks.forEach(entry => {
-                container.appendChild(createTaskElement(entry));
+                container.appendChild(createTaskElement(entry.id));
             });
             content.appendChild(container);
         }
@@ -150,25 +183,43 @@ const ui = (() => {
         const project = controller.projects.find(projectId);
 
         const header = createCustomElement("div", "project-header");
+        header.dataset.id = projectId;
         const headerTitle = createCustomElement("h2", "project-title", project.title);
         const headerActions = createCustomElement("div", "actions");
 
         const addTaskBtn = createCustomElement("button", "add-task-btn");
         addTaskBtn.appendChild(createImageElement(addTaskIcon));
+        addTaskBtn.addEventListener("click", openTaskForm);
+        addTaskBtn.title = "Add a Task";
         const addNoteBtn = createCustomElement("button", "add-note-btn");
         addNoteBtn.appendChild(createImageElement(addNoteIcon));
+        addNoteBtn.addEventListener("click", openNoteForm);
+        addNoteBtn.title = "Add a Note";
 
         headerActions.append(addTaskBtn, addNoteBtn);
 
         if (!projectId.includes("daily") && !projectId.includes("weekly")) {
             const deleteBtn = createCustomElement("button", "delete-project-btn");
             deleteBtn.appendChild(createImageElement(deleteIcon));
+            deleteBtn.title = "Delete Project";
             headerActions.appendChild(deleteBtn);
         }
 
         header.append(headerTitle, headerActions);
 
         return header;
+    }
+
+    function openTaskForm(e) {
+        const parentId = e.target.closest(".project-header").dataset.id;
+        taskDialog.dataset.parentId = parentId;
+        taskDialog.showModal();
+    }
+
+    function openNoteForm(e) {
+        const parentId = e.target.closest(".project-header").dataset.id;
+        noteDialog.dataset.parentId = parentId;
+        noteDialog.showModal();
     }
 
     function createTaskElement(taskId) {
@@ -185,7 +236,12 @@ const ui = (() => {
         });
 
         const title = createCustomElement("span", "task-title", task.title);
-        const description = createCustomElement("p", "task-description", task.description);
+        const description = createCustomElement("div", "task-description");
+        const paragraphs = task.description.split("\n");
+        paragraphs.forEach(paragraph => {
+            description.appendChild(createCustomElement("p", "", paragraph));
+        });
+
         const dueDate = createCustomElement("span", "task-due-date", task.dueDate);
         const priority = createCustomElement("span", `task-priority priority-${(task.priority || 1)}`, task.priority);
 
@@ -198,7 +254,12 @@ const ui = (() => {
         const element = createCustomElement("div", "note");
 
         const title = createCustomElement("span", "note-title", note.title);
-        const description = createCustomElement("p", "note-description", note.description);
+
+        const description = createCustomElement("div", "note-description");
+        const paragraphs = note.description.split("\n");
+        paragraphs.forEach(paragraph => {
+            description.appendChild(createCustomElement("p", "", paragraph));
+        });
 
         element.append(title, description);
         return element;
@@ -211,6 +272,7 @@ const ui = (() => {
             const listItem = createCustomElement("li", "project");
             const title = createCustomElement("div", "project-title", entry.title);
             const deleteBtn = createCustomElement("button", "delete-project-btn", "");
+            deleteBtn.title = "Delete Project";
             deleteBtn.appendChild(
                 createImageElement(deleteIcon)
             );
