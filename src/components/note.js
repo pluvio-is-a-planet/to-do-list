@@ -14,8 +14,8 @@ class Note {
     get description() { return this._description }
 
     update({title, description}) {
-        this._title = title;
-        this._description = description;
+        if (title) this._title = title;
+        if (description) this._description = description;
     }
 
     toJSON() {
