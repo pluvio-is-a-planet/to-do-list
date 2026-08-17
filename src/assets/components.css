@@ -300,6 +300,10 @@ dialog.note-form-dialog::backdrop {
     height: fit-content;
 }
 
+.note-header .note-title {
+    flex: 1;
+}
+
 .content .note .note-header,
 .content .task .task-header {
     display: flex;
