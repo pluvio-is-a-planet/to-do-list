@@ -24,7 +24,7 @@ class Task {
         if (description) this._description = description;
         if (dueDate) this._dueDate = dueDate;
         if (priority) this._priority = priority;
-        if (completed) this._completed = completed;
+        if (completed !== undefined) this._completed = completed;
     }
 
     toJSON() {
