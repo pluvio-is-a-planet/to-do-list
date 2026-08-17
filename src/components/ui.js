@@ -120,17 +120,14 @@ const ui = (() => {
 
         content.replaceChildren();
 
-        const header = createCustomElement("div", "project-header");
-        const headerTitle = createCustomElement("h2", "project-title", project.title);
-        const headerActions = createCustomElement("div", "actions");
+        const header = createProjectHeader(projectId);
 
-        header.append(headerTitle, headerActions);
         content.appendChild(header);
 
         if (tasks && tasks.length > 0) {
             const container = createCustomElement("div", "tasks");
             tasks.forEach(entry => {
-                const taskElement = createTaskElement(entry);
+                const taskElement = createTaskElement(entry.id);
                 container.appendChild(taskElement);
             });
 
@@ -140,7 +137,7 @@ const ui = (() => {
         if (notes && notes.length > 0) {
             const container = createCustomElement("div", "notes");
             notes.forEach(entry => {
-                const noteElement = createNoteElement(entry);
+                const noteElement = createNoteElement(entry.id);
                 container.appendChild(noteElement);
             })
 
@@ -148,7 +145,28 @@ const ui = (() => {
         }
     }
 
-    function createTaskElement(task) {
+    function createProjectHeader(projectId) {
+        const project = controller.projects.find(projectId);
+
+        const header = createCustomElement("div", "project-header");
+        const headerTitle = createCustomElement("h2", "project-title", project.title);
+        const headerActions = createCustomElement("div", "actions");
+
+        const addTaskBtn = createCustomElement("button", "add-task-btn");
+        addTaskBtn.appendChild(createImageElement(addTaskIcon));
+        const addNoteBtn = createCustomElement("button", "add-note-btn");
+        addNoteBtn.appendChild(createImageElement(addNoteIcon));
+        const deleteBtn = createCustomElement("button", "delete-project-btn");
+        deleteBtn.appendChild(createImageElement(deleteIcon));
+
+        headerActions.append(addTaskBtn, addNoteBtn, deleteBtn);
+        header.append(headerTitle, headerActions);
+
+        return header;
+    }
+
+    function createTaskElement(taskId) {
+        const task = controller.tasks.find(taskId);
         const element = createCustomElement("div", "task");
 
         const checkbox = createCustomElement("input", "task-complete");
@@ -169,7 +187,8 @@ const ui = (() => {
         return element;
     }
 
-    function createNoteElement(note) {
+    function createNoteElement(noteId) {
+        const note = controller.notes.find(noteId);
         const element = createCustomElement("div", "note");
 
         const title = createCustomElement("span", "note-title", note.title);
