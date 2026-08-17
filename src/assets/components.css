@@ -121,6 +121,10 @@ dialog.note-form-dialog::backdrop {
     border-color: var(--color-bg-light);
 }
 
+.actions .task-form-dialog input[type="date"] {
+    width: 11em;
+}
+
 /* select dropdown arrow, styled to match theme instead of native browser chrome */
 .task-form-dialog select {
     appearance: none;
@@ -227,6 +231,11 @@ dialog.note-form-dialog::backdrop {
     grid-column: 1 / -1;
 }
 
+.task-description p,
+.note-description p {
+    word-wrap: break-word;
+}
+
 .task .task-header {
     display: flex;
     align-items: center;
@@ -240,9 +249,6 @@ dialog.note-form-dialog::backdrop {
 
 .task-header .task-title {
     flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .task-header input[type="checkbox"] {
