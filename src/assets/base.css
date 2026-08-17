@@ -77,6 +77,8 @@ body .main {
     justify-content: space-between;
 
     padding: 16px;
+
+    width: 260px;
 }
 
 .sidebar .categories {
@@ -110,8 +112,7 @@ body .main {
 
 .category-list {
     list-style: none;
-    padding-left: 20px;
-    margin-top: 4px;
+    margin: 8px 0 8px 12px;
 
     display: flex;
     flex-direction: column;
@@ -119,8 +120,10 @@ body .main {
 
     background-color: var(--color-btn-border);
 
-    max-height: 240px;
+    height: 220px;
     overflow-y: auto;
+
+    position: relative;
 }
 
 .category-list li {
@@ -133,16 +136,23 @@ body .main {
     justify-content: space-between;
 }
 
-.category-list li h3 {
+.category-list li .project-title {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 
-    width: fit-content;
-    max-width: 12ch;
+    max-width: 10ch;
+
+    font-weight: 600;
 }
 
-.category-list li h3,
+.category-list li .project-title,
+.category-list li button {
+    display: flex;
+    align-items: center;
+}
+
+.category-list li .project-title,
 .category-list li button {
     cursor: pointer;
 }
@@ -163,10 +173,11 @@ body .main {
     justify-content: flex-start;
 
     gap: 8px;
+
+    padding: 8px 12px;
 }
 
-.sidebar .category-list button,
-.sidebar .actions button {
+button {
     background-color: transparent;
     border: none;
 
@@ -201,7 +212,7 @@ body .main {
     width: 100%;
 
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 8px;
 }
 

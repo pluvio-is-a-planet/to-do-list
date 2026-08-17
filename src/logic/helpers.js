@@ -5,4 +5,11 @@ function createCustomElement(tag, className, textContent) {
     return element;
 }
 
-export { createCustomElement };
+function createImageElement(src, alt) {
+    const element = document.createElement("img");
+    element.src = src;
+    element.alt = alt;
+    return element;
+}
+
+export { createCustomElement, createImageElement };
