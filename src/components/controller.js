@@ -14,6 +14,14 @@ const controller = (() => {
     const _tasks = Collection.fromJSON(Task, load("tasks"), () => save("tasks", _tasks));
     const _notes = Collection.fromJSON(Note, load("notes"), () => save("notes", _notes));
 
+    if (!_projects.find("project-daily")) {
+        _projects.add({title: "Daily", id: "project-daily"});
+    }
+
+    if (!_projects.find("project-weekly")) {
+        _projects.add({title: "Weekly", id: "project-weekly"});
+    }
+
     const _collections = { project: _projects, task: _tasks, note: _notes };
 
     function onUpdate(callback) {
