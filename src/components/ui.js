@@ -9,6 +9,8 @@ import addTaskIcon from "../assets/icons/create-task.svg";
 import addNoteIcon from "../assets/icons/create-note.svg";
 import deleteIcon from "../assets/icons/delete.svg";
 
+import { format, formatDate } from "date-fns";
+
 import "../assets/components.css";
 
 const ui = (() => {
@@ -233,7 +235,7 @@ const ui = (() => {
             description.appendChild(createCustomElement("p", "", paragraph));
         });
 
-        const dueDate = createCustomElement("span", "task-due-date", task.dueDate);
+        const dueDate = createCustomElement("span", "task-due-date", `Due: ${format(task.dueDate, "dd/MM")}`);
         const priority = createCustomElement("span", `task-priority priority-${(task.priority || 1)}`, task.priority);
 
         element.append(header, description, dueDate, priority);
