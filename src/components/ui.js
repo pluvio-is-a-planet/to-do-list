@@ -8,6 +8,7 @@ import addProjectIcon from "../assets/icons/create-project.svg";
 import addTaskIcon from "../assets/icons/create-task.svg";
 import addNoteIcon from "../assets/icons/create-note.svg";
 import deleteIcon from "../assets/icons/delete.svg";
+import editIcon from "../assets/icons/edit.svg";
 
 import { format, formatDate } from "date-fns";
 
@@ -65,25 +66,45 @@ const ui = (() => {
 
     taskForm.addEventListener("submit", e => {
         e.preventDefault();
-        controller.tasks.add({
-            parentId: taskDialog.dataset.parentId,
+
+        const values = {
             title: taskForm.querySelector("#task-title").value,
             description: taskForm.querySelector("#task-description").value,
             dueDate: taskForm.querySelector("#task-due-date").value,
             priority: taskForm.querySelector("#task-priority").value,
-            completed: false,
-        });
+        };
+
+        if (taskDialog.dataset.mode === "edit") {
+            controller.tasks.update(taskDialog.dataset.taskId, values);
+        } else {
+            controller.tasks.add({
+                parentId: taskDialog.dataset.parentId,
+                completed: false,
+                ...values,
+            });
+        }
+
         taskForm.reset();
         taskDialog.close();
     });
 
     noteForm.addEventListener("submit", e => {
         e.preventDefault();
-        controller.notes.add({
-            parentId: noteDialog.dataset.parentId,
+
+        const values = {
             title: noteForm.querySelector("#note-title").value,
             description: noteForm.querySelector("#note-description").value,
-        });
+        };
+
+        if (noteDialog.dataset.mode === "edit") {
+            controller.notes.update(noteDialog.dataset.noteId, values);
+        } else {
+            controller.notes.add({
+                parentId: noteDialog.dataset.parentId,
+                ...values,
+            });
+        }
+
         noteForm.reset();
         noteDialog.close();
     });
@@ -214,13 +235,51 @@ const ui = (() => {
 
     function openTaskForm(e) {
         const parentId = e.target.closest(".project-header").dataset.id;
+        taskDialog.dataset.mode = "add";
         taskDialog.dataset.parentId = parentId;
+        delete taskDialog.dataset.taskId;
+        taskForm.reset();
+        taskForm.querySelector("[type='submit']").textContent = "Add";
+        taskDialog.showModal();
+    }
+
+    function openEditTaskForm(taskId) {
+        const task = controller.tasks.find(taskId);
+
+        taskDialog.dataset.mode = "edit";
+        taskDialog.dataset.taskId = taskId;
+        delete taskDialog.dataset.parentId;
+
+        taskForm.querySelector("#task-title").value = task.title;
+        taskForm.querySelector("#task-description").value = task.description;
+        taskForm.querySelector("#task-due-date").value = task.dueDate;
+        taskForm.querySelector("#task-priority").value = task.priority;
+        taskForm.querySelector("[type='submit']").textContent = "Save";
+
         taskDialog.showModal();
     }
 
     function openNoteForm(e) {
         const parentId = e.target.closest(".project-header").dataset.id;
+        noteDialog.dataset.mode = "add";
         noteDialog.dataset.parentId = parentId;
+        delete noteDialog.dataset.noteId;
+        noteForm.reset();
+        noteForm.querySelector("[type='submit']").textContent = "Add";
+        noteDialog.showModal();
+    }
+
+    function openEditNoteForm(noteId) {
+        const note = controller.notes.find(noteId);
+
+        noteDialog.dataset.mode = "edit";
+        noteDialog.dataset.noteId = noteId;
+        delete noteDialog.dataset.parentId;
+
+        noteForm.querySelector("#note-title").value = note.title;
+        noteForm.querySelector("#note-description").value = note.description;
+        noteForm.querySelector("[type='submit']").textContent = "Save";
+
         noteDialog.showModal();
     }
 
@@ -260,11 +319,19 @@ const ui = (() => {
         element.append(title, checkbox);
 
         const actions = createCustomElement("div", "actions");
+
+        const editTaskBtn = createCustomElement("button", "edit-task-btn");
+        editTaskBtn.appendChild(createImageElement(editIcon));
+        editTaskBtn.title = "Edit Task";
+        editTaskBtn.addEventListener("click", () => openEditTaskForm(taskId));
+        actions.appendChild(editTaskBtn);
+
         const deleteTaskBtn = createCustomElement("button", "delete-task-btn");
         deleteTaskBtn.appendChild(createImageElement(deleteIcon));
         deleteTaskBtn.title = "Delete Task";
         deleteTaskBtn.addEventListener("click", () => controller.remove(taskId));
         actions.appendChild(deleteTaskBtn);
+
         element.appendChild(actions);
 
         return element;
@@ -277,12 +344,17 @@ const ui = (() => {
         const header = createCustomElement("div", "note-header");
         const title = createCustomElement("span", "note-title", note.title);
 
+        const editNoteBtn = createCustomElement("button", "edit-note-btn");
+        editNoteBtn.appendChild(createImageElement(editIcon));
+        editNoteBtn.title = "Edit Note";
+        editNoteBtn.addEventListener("click", () => openEditNoteForm(noteId));
+
         const deleteNoteBtn = createCustomElement("button", "delete-note-btn");
         deleteNoteBtn.appendChild(createImageElement(deleteIcon));
         deleteNoteBtn.title = "Delete Note";
         deleteNoteBtn.addEventListener("click", () => controller.remove(noteId));
 
-        header.append(title, deleteNoteBtn);
+        header.append(title, editNoteBtn, deleteNoteBtn);
 
         const description = createCustomElement("div", "note-description");
         const paragraphs = note.description.split("\n");
