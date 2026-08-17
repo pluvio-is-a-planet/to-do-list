@@ -1,0 +1,15 @@
+.content .project-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.project-header .actions {
+    display: flex;
+    gap: 8px;
+}
+
+.project-header .actions button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

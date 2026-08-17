@@ -134,6 +134,8 @@ body .main {
 
     display: flex;
     justify-content: space-between;
+
+    cursor: pointer;
 }
 
 .category-list li .project-title {
@@ -150,11 +152,6 @@ body .main {
 .category-list li button {
     display: flex;
     align-items: center;
-}
-
-.category-list li .project-title,
-.category-list li button {
-    cursor: pointer;
 }
 
 .category-list li:hover {
