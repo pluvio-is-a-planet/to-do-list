@@ -38,7 +38,15 @@ const ui = (() => {
     const titleInput = projectForm.querySelector("input#project-title");
     const cancelProjectBtn = projectForm.querySelector(".cancel-btn");
 
-    // renderHome();
+    const homeBtn = document.querySelector(".home .category-header");
+    const dailyBtn = document.querySelector(".daily .category-header");
+    const weeklyBtn = document.querySelector(".weekly .category-header");
+
+    homeBtn.addEventListener("click", renderHome);
+    dailyBtn.addEventListener("click", e => renderProjectContent("project-daily"));
+    weeklyBtn.addEventListener("click", e => renderProjectContent("project-weekly"));
+
+    renderHome();
     renderProjectList();
     controller.onUpdate(renderProjectList);
     controller.onUpdate(() => {
