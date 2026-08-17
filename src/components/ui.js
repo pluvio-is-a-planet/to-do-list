@@ -2,13 +2,21 @@ import controller from "./controller.js";
 
 import { createCustomElement, createImageElement } from "../logic/helpers.js";
 
+import { extractType } from "../logic/id.js";
+
+import addProjectIcon from "../assets/icons/create-project.svg";
+import addTaskIcon from "../assets/icons/create-task.svg";
+import addNoteIcon from "../assets/icons/create-note.svg";
 import deleteIcon from "../assets/icons/delete.svg";
+
+import "../assets/components.css";
 
 const ui = (() => {
     // --- project setup ---
 
     const sidebarProjects = document.querySelector(".categories .projects");
     const projectList = sidebarProjects.querySelector("ul");
+    const projectFormBtn = document.querySelector(".project-form-btn");
     const projectForm = document.querySelector(".actions .project-form");
     const titleInput = projectForm.querySelector("input#project-title");
     const cancelProjectBtn = projectForm.querySelector(".cancel-btn");
@@ -22,12 +30,12 @@ const ui = (() => {
     });
     
     projectList.addEventListener("click", e => {
-        // const target = e.target.closest("h3");
-        // renderProjectContent(controller.projects.find(target.dataset.id));
-
+        // do nothing
     });
 
-    const projectFormBtn = document.querySelector(".project-form-btn");
+    projectFormBtn.appendChild(
+        createImageElement(addProjectIcon)
+    );
     projectFormBtn.addEventListener("click", e => {
         toggleProjectForm();
         titleInput.focus();
@@ -47,15 +55,15 @@ const ui = (() => {
         projects.forEach(entry => {
             console.log(entry.title);
             const listItem = createCustomElement("li", "project");
-            const title = createCustomElement("h3", "project-title", entry.title);
-            const deleteBtn = createCustomElement("button", "delete-project", "");
+            const title = createCustomElement("div", "project-title", entry.title);
+            const deleteBtn = createCustomElement("button", "delete-project-btn", "");
             deleteBtn.appendChild(
                 createImageElement(deleteIcon)
             );
 
-            title.dataset.id = entry.id;
+            listItem.dataset.id = entry.id;
 
-            deleteBtn.addEventListener("click", e => controller.projects.remove(title.dataset.id));
+            deleteBtn.addEventListener("click", e => controller.projects.remove(e.target.closest(".project").dataset.id));
 
             listItem.appendChild(title);
             listItem.appendChild(deleteBtn);
