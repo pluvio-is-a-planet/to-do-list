@@ -51,9 +51,8 @@ const ui = (() => {
 
     function renderProjectList() {
         projectList.replaceChildren();
-        const projects = controller.projects.all;
+        const projects = controller.projects.all.filter(entry => !["project-daily", "project-weekly"].includes(entry.id));
         projects.forEach(entry => {
-            console.log(entry.title);
             const listItem = createCustomElement("li", "project");
             const title = createCustomElement("div", "project-title", entry.title);
             const deleteBtn = createCustomElement("button", "delete-project-btn", "");
