@@ -12,6 +12,23 @@ import deleteIcon from "../assets/icons/delete.svg";
 import "../assets/components.css";
 
 const ui = (() => {
+    let _selectedProjectId;
+
+    const selectedProject = {
+        get id() { return _selectedProjectId },
+        set id(projectId) {
+            _selectedProjectId = projectId;
+            if (projectId && controller.projects.find(projectId)) {
+                renderProjectContent(projectId);
+            } else {
+                _selectedProjectId = null;
+                renderHome();
+            }
+        },
+    };
+
+    const content = document.querySelector(".content");
+
     // --- project setup ---
 
     const sidebarProjects = document.querySelector(".categories .projects");
@@ -21,8 +38,12 @@ const ui = (() => {
     const titleInput = projectForm.querySelector("input#project-title");
     const cancelProjectBtn = projectForm.querySelector(".cancel-btn");
 
+    // renderHome();
     renderProjectList();
     controller.onUpdate(renderProjectList);
+    controller.onUpdate(() => {
+        selectedProject.id = selectedProject.id;
+    });
 
     sidebarProjects.addEventListener("click", e => {
         const target = e.target.closest(".category-header");
@@ -30,7 +51,16 @@ const ui = (() => {
     });
     
     projectList.addEventListener("click", e => {
-        // do nothing
+        const project = e.target.closest(".project");
+        if (!project) return;
+
+        const deleteBtn = e.target.closest(".delete-project-btn");
+        if (deleteBtn) {
+            controller.remove(project.dataset.id);
+            return;
+        }
+
+        selectedProject.id = project.dataset.id;
     });
 
     projectFormBtn.appendChild(
@@ -49,6 +79,98 @@ const ui = (() => {
         titleInput.focus();
     });
 
+    // --- render functions ---
+
+    function renderHome() {
+        const uncompletedTasks = controller.tasks.all.filter(task => !task.completed);
+
+        content.replaceChildren();
+
+        const header = createCustomElement("div", "project-header");
+        const headerTitle = createCustomElement("h2", "project-title", "Home");
+        header.append(headerTitle);
+        content.appendChild(header);
+
+        if (uncompletedTasks.length > 0) {
+            const container = createCustomElement("div", "tasks");
+            uncompletedTasks.forEach(entry => {
+                container.appendChild(createTaskElement(entry));
+            });
+            content.appendChild(container);
+        }
+    }
+
+    function renderProjectContent(projectId) {
+        const project = controller.projects.find(projectId);
+        const children = controller.getChildren(projectId);
+
+        const taskPrefix = "task";
+        const notePrefix = "note";
+
+        const tasks = children.filter(entry => extractType(entry.id) === taskPrefix);
+        const notes = children.filter(entry => extractType(entry.id) === notePrefix);
+
+        content.replaceChildren();
+
+        const header = createCustomElement("div", "project-header");
+        const headerTitle = createCustomElement("h2", "project-title", project.title);
+        const headerActions = createCustomElement("div", "actions");
+
+        header.append(headerTitle, headerActions);
+        content.appendChild(header);
+
+        if (tasks && tasks.length > 0) {
+            const container = createCustomElement("div", "tasks");
+            tasks.forEach(entry => {
+                const taskElement = createTaskElement(entry);
+                container.appendChild(taskElement);
+            });
+
+            content.appendChild(container);
+        }
+
+        if (notes && notes.length > 0) {
+            const container = createCustomElement("div", "notes");
+            notes.forEach(entry => {
+                const noteElement = createNoteElement(entry);
+                container.appendChild(noteElement);
+            })
+
+            content.appendChild(container);
+        }
+    }
+
+    function createTaskElement(task) {
+        const element = createCustomElement("div", "task");
+
+        const checkbox = createCustomElement("input", "task-complete");
+        checkbox.type = "checkbox";
+        checkbox.checked = task.completed;
+        checkbox.addEventListener("change", () => {
+            controller.tasks.update(task.id, {
+                completed: checkbox.checked,
+            });
+        });
+
+        const title = createCustomElement("span", "task-title", task.title);
+        const description = createCustomElement("p", "task-description", task.description);
+        const dueDate = createCustomElement("span", "task-due-date", task.dueDate);
+        const priority = createCustomElement("span", `task-priority priority-${(task.priority || 1)}`, task.priority);
+
+        element.append(checkbox, title, description, dueDate, priority);
+        return element;
+    }
+
+    function createNoteElement(note) {
+        const element = createCustomElement("div", "note");
+
+        const title = createCustomElement("span", "note-title", note.title);
+        const description = createCustomElement("p", "note-description", note.description);
+
+        element.append(title, description);
+        return element;
+    }
+
     function renderProjectList() {
         projectList.replaceChildren();
         const projects = controller.projects.all.filter(entry => !["project-daily", "project-weekly"].includes(entry.id));
@@ -61,8 +183,6 @@ const ui = (() => {
             );
 
             listItem.dataset.id = entry.id;
-
-            deleteBtn.addEventListener("click", e => controller.projects.remove(e.target.closest(".project").dataset.id));
 
             listItem.appendChild(title);
             listItem.appendChild(deleteBtn);
