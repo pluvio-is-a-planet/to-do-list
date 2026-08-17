@@ -85,6 +85,7 @@ const ui = (() => {
         controller.projects.add({title: titleInput.value});
         projectForm.reset();
         titleInput.focus();
+        selectedProject.id = controller.projects.all[controller.projects.all.length - 1].id;
     });
 
     // --- render functions ---
@@ -156,10 +157,15 @@ const ui = (() => {
         addTaskBtn.appendChild(createImageElement(addTaskIcon));
         const addNoteBtn = createCustomElement("button", "add-note-btn");
         addNoteBtn.appendChild(createImageElement(addNoteIcon));
-        const deleteBtn = createCustomElement("button", "delete-project-btn");
-        deleteBtn.appendChild(createImageElement(deleteIcon));
 
-        headerActions.append(addTaskBtn, addNoteBtn, deleteBtn);
+        headerActions.append(addTaskBtn, addNoteBtn);
+
+        if (!projectId.includes("daily") && !projectId.includes("weekly")) {
+            const deleteBtn = createCustomElement("button", "delete-project-btn");
+            deleteBtn.appendChild(createImageElement(deleteIcon));
+            headerActions.appendChild(deleteBtn);
+        }
+
         header.append(headerTitle, headerActions);
 
         return header;
