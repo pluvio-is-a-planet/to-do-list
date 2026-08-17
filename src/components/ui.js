@@ -226,6 +226,24 @@ const ui = (() => {
         const task = controller.tasks.find(taskId);
         const element = createCustomElement("div", "task");
 
+        const header = createTaskHeader(taskId);
+        const description = createCustomElement("div", "task-description");
+        const paragraphs = task.description.split("\n");
+        paragraphs.forEach(paragraph => {
+            description.appendChild(createCustomElement("p", "", paragraph));
+        });
+
+        const dueDate = createCustomElement("span", "task-due-date", task.dueDate);
+        const priority = createCustomElement("span", `task-priority priority-${(task.priority || 1)}`, task.priority);
+
+        element.append(header, description, dueDate, priority);
+        return element;
+    }
+
+    function createTaskHeader(taskId) {
+        const element = createCustomElement("div", "task-header");
+        const task = controller.tasks.find(taskId);
+
         const checkbox = createCustomElement("input", "task-complete");
         checkbox.type = "checkbox";
         checkbox.checked = task.completed;
@@ -236,16 +254,17 @@ const ui = (() => {
         });
 
         const title = createCustomElement("span", "task-title", task.title);
-        const description = createCustomElement("div", "task-description");
-        const paragraphs = task.description.split("\n");
-        paragraphs.forEach(paragraph => {
-            description.appendChild(createCustomElement("p", "", paragraph));
-        });
 
-        const dueDate = createCustomElement("span", "task-due-date", task.dueDate);
-        const priority = createCustomElement("span", `task-priority priority-${(task.priority || 1)}`, task.priority);
+        element.append(title, checkbox);
 
-        element.append(checkbox, title, description, dueDate, priority);
+        const actions = createCustomElement("div", "actions");
+        const deleteTaskBtn = createCustomElement("button", "delete-task-btn");
+        deleteTaskBtn.appendChild(createImageElement(deleteIcon));
+        deleteTaskBtn.title = "Delete Task";
+        deleteTaskBtn.addEventListener("click", () => controller.remove(taskId));
+        actions.appendChild(deleteTaskBtn);
+        element.appendChild(actions);
+
         return element;
     }
 
@@ -253,7 +272,15 @@ const ui = (() => {
         const note = controller.notes.find(noteId);
         const element = createCustomElement("div", "note");
 
+        const header = createCustomElement("div", "note-header");
         const title = createCustomElement("span", "note-title", note.title);
+
+        const deleteNoteBtn = createCustomElement("button", "delete-note-btn");
+        deleteNoteBtn.appendChild(createImageElement(deleteIcon));
+        deleteNoteBtn.title = "Delete Note";
+        deleteNoteBtn.addEventListener("click", () => controller.remove(noteId));
+
+        header.append(title, deleteNoteBtn);
 
         const description = createCustomElement("div", "note-description");
         const paragraphs = note.description.split("\n");
@@ -261,7 +288,7 @@ const ui = (() => {
             description.appendChild(createCustomElement("p", "", paragraph));
         });
 
-        element.append(title, description);
+        element.append(header, description);
         return element;
     }
 
