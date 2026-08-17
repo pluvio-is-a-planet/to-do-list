@@ -263,7 +263,7 @@ button {
     padding: 16px;
 
     display: grid;
-    grid-template-columns: repeat(auto-fit, 240px);
+    grid-template-columns: repeat(4, 1fr);
     grid-template-rows: auto 240px;
     grid-auto-rows: 240px;
     align-content: flex-start;
