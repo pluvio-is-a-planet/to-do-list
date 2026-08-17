@@ -10,7 +10,7 @@ class Project {
     get title() { return this._title }
 
     update({title}) {
-        this._title = title;
+        if (title) this._title = title;
     }
 
     toJSON() {
