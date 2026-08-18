@@ -161,17 +161,17 @@
     justify-self: flex-end;
 }
 
-.priority-Low {
+.priority-low {
     background-color: #448345;
     color: var(--color-text);
 }
 
-.priority-Medium {
+.priority-medium {
     background-color: #a68a35;
     color: var(--color-text);
 }
 
-.priority-High {
+.priority-high {
     background-color: #b15151;
     color: var(--color-text);
 }
