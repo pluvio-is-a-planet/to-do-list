@@ -207,7 +207,9 @@ const ui = (() => {
 
         const header = createCustomElement("div", "project-header");
         header.dataset.id = projectId;
+        const titleContainer = createCustomElement("div", "title-container");
         const headerTitle = createCustomElement("h2", "project-title", project.title);
+        titleContainer.appendChild(headerTitle);
         const headerActions = createCustomElement("div", "actions");
 
         const addTaskBtn = createCustomElement("button", "add-task-btn");
@@ -226,9 +228,14 @@ const ui = (() => {
             deleteBtn.appendChild(createImageElement(deleteIcon));
             deleteBtn.title = "Delete Project";
             headerActions.appendChild(deleteBtn);
+
+            const editBtn = createCustomElement("button", "edit-project-btn");
+            editBtn.appendChild(createImageElement(editIcon));
+            editBtn.title = "Edit Project Name";
+            titleContainer.appendChild(editBtn);
         }
 
-        header.append(headerTitle, headerActions);
+        header.append(titleContainer, headerActions);
 
         return header;
     }
