@@ -9,6 +9,7 @@ import { createProjectHeader } from "./project-interface.js";
 
 export function renderHome() {
     const uncompletedTasks = controller.tasks.all.filter(task => !task.completed);
+    const sortedTasks = uncompletedTasks.sort(comparePriorityThenDate);
 
     content.replaceChildren();
 
@@ -17,13 +18,21 @@ export function renderHome() {
     header.append(headerTitle);
     content.appendChild(header);
 
-    if (uncompletedTasks.length > 0) {
+    if (sortedTasks.length > 0) {
         const container = createCustomElement("div", "tasks");
-        uncompletedTasks.forEach(entry => {
+        sortedTasks.forEach(entry => {
             container.appendChild(createTaskElement(entry.id));
         });
         content.appendChild(container);
     }
+}
+
+function comparePriorityThenDate(a, b) {
+    const priorityNumbers = { high: 3, medium: 2, low: 1 };
+    const priorityDiff = priorityNumbers[b.priority] - priorityNumbers[a.priority];
+    if (priorityDiff !== 0) return priorityDiff;
+    
+    return new Date(a.dueDate) - new Date(b.dueDate);
 }
 
 export function renderProjectContent(projectId) {
