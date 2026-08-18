@@ -16,6 +16,7 @@ function openTaskForm(e) {
     delete taskDialog.dataset.taskId;
     taskForm.reset();
     taskForm.querySelector("[type='submit']").textContent = "Add";
+    taskDialog.querySelector("#task-due-date").value = format(new Date(), "yyyy-MM-dd");
     taskDialog.showModal();
 }
 
