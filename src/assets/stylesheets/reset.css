@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Oldenburg&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.oldenburg-regular {
+    font-family: "Oldenburg", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+:root {
+    --color-bg-dark: #1f1815;
+    --color-bg: #433631;
+    --color-bg-light: #604f49;
+
+    --color-btn-bg: #4f403a;
+    --color-btn-border: #2f2621;
+
+    --color-text: #ede4e0;
+}
+
+.hidden,
+.sidebar .categories .hidden,
+.sidebar .actions form.hidden {
+    display: none;
+}
+
+button {
+    background-color: transparent;
+    border: none;
+
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+/* --- scrollbar --- */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: var(--color-bg-dark);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--color-bg-light);
+    border-radius: 1em;
+}

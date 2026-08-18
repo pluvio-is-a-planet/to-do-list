@@ -3,7 +3,7 @@ import { createImageElement } from "../logic/helpers.js";
 
 import addProjectIcon from "../assets/icons/create-project.svg";
 
-import "../assets/components.css";
+import "../assets/stylesheets/index.css";
 
 import {
     sidebarProjects,
