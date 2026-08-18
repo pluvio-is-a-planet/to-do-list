@@ -51,9 +51,6 @@
     display: flex;
     flex-shrink: 0;
     gap: 8px;
-
-    /* .project-header centers its items; pin actions to the top */
-    align-self: flex-start;
 }
 
 .project-header .actions button {
