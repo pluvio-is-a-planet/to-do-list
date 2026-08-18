@@ -1,3 +1,3 @@
-import ui from "./components/ui.js";
+import ui from "./ui/ui-controller.js";
 
 import "./assets/base.css";
